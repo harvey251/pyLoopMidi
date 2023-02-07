@@ -4,9 +4,9 @@ import mido as mido
 import pygame
 
 
-STOP_BUTTONS = {5, 15, 23, 35, 45, 55, 65, 75, 85, 95}
+STOP_BUTTONS = {5, 15, 25, 35, 45, 55, 65, 75, 85, 95}
 REPEAT_BUTTONS = {6, 16, 26, 36, 46, 66, 66, 76, 86, 96}
-RESUME_BUTTONS = {7, 17, 23, 37, 47, 77, 67, 77, 87, 97}
+RESUME_BUTTONS = {7, 17, 27, 37, 47, 77, 67, 77, 87, 97}
 
 
 ON = 127
@@ -55,7 +55,9 @@ if __name__ == '__main__':
         with in_port as port:
             for message in port:
                 print("receiving message", message)
-                if message.program in STOP_BUTTONS:
+                if not  hasattr(message, "program"):
+                    out_msg =message
+                elif message.program in STOP_BUTTONS:
                     out_msg = mido.Message("control_change", channel=0, control=5, value=ON, time=0)
                 elif message.program in REPEAT_BUTTONS:
                     out_msg = mido.Message("control_change", channel=0, control=6, value=ON, time=0)
